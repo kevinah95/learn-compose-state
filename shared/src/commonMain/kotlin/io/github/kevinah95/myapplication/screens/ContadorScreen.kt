@@ -1,4 +1,4 @@
-package org.example.composestate.screens
+package io.github.kevinah95.myapplication.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

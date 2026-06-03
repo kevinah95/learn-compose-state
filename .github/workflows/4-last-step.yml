@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'composeApp/src/commonMain/kotlin/**/ContadorView.kt'
+      - 'shared/src/commonMain/kotlin/io/github/kevinah95/myapplication/screens/ContadorView.kt'
 
 jobs:
   check_step_4:
@@ -22,7 +22,7 @@ jobs:
       - name: Verificar que ContadorView.kt existe y es stateless
         id: check
         run: |
-          FILE="composeApp/src/commonMain/kotlin/org/example/composestate/screens/ContadorView.kt"
+          FILE="shared/src/commonMain/kotlin/io/github/kevinah95/myapplication/screens/ContadorView.kt"
 
           if [ ! -f "$FILE" ]; then
             echo "❌ ContadorView.kt no encontrado. Crea el archivo stateless. Revisa el Paso 4."
@@ -50,7 +50,7 @@ jobs:
 
       - name: Verificar que ContadorScreen.kt usa ContadorView
         run: |
-          FILE="composeApp/src/commonMain/kotlin/org/example/composestate/screens/ContadorScreen.kt"
+          FILE="shared/src/commonMain/kotlin/io/github/kevinah95/myapplication/screens/ContadorScreen.kt"
           if ! grep -q "ContadorView" "$FILE"; then
             echo "❌ ContadorScreen.kt debe llamar a ContadorView(). Revisa el Paso 4."
             exit 1

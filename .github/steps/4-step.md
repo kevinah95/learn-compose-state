@@ -35,7 +35,7 @@ ContadorView()          ← stateless, solo UI
 Crea el archivo `composeApp/src/commonMain/kotlin/org/example/composestate/screens/ContadorView.kt` con el Composable stateless:
 
 ```kotlin
-package org.example.composestate.screens
+package io.github.kevinah95.myapplication.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -84,7 +84,7 @@ fun ContadorView(
 Luego actualiza `ContadorScreen.kt` para que sea el **stateful** que usa `ContadorView`:
 
 ```kotlin
-package org.example.composestate.screens
+package io.github.kevinah95.myapplication.screens
 
 import androidx.compose.runtime.*
 

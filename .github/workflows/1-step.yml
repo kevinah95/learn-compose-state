@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'composeApp/src/commonMain/kotlin/**/ContadorScreen.kt'
+      - 'shared/src/commonMain/kotlin/io/github/kevinah95/myapplication/screens/ContadorScreen.kt'
 
 jobs:
   check_step_1:
@@ -22,7 +22,7 @@ jobs:
       - name: Verificar que ContadorScreen.kt tiene un comentario sobre var
         id: check
         run: |
-          FILE="composeApp/src/commonMain/kotlin/org/example/composestate/screens/ContadorScreen.kt"
+          FILE="shared/src/commonMain/kotlin/io/github/kevinah95/myapplication/screens/ContadorScreen.kt"
           if grep -q "var count = 0" "$FILE"; then
             echo "result=success" >> "$GITHUB_OUTPUT"
           else
