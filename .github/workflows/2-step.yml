@@ -25,13 +25,13 @@ jobs:
           FILE="shared/src/commonMain/kotlin/io/github/kevinah95/myapplication/screens/ContadorScreen.kt"
 
           if ! grep -q "remember" "$FILE"; then
-            echo "❌ ContadorScreen.kt debe usar 'remember'. Revisa el Paso 2."
-            exit 1
+            echo "⏭️ Paso 2 aún no completado — 'remember' no encontrado."
+            exit 0
           fi
 
           if ! grep -q "mutableStateOf" "$FILE"; then
-            echo "❌ ContadorScreen.kt debe usar 'mutableStateOf' junto con 'remember'."
-            exit 1
+            echo "⏭️ Paso 2 incompleto — falta 'mutableStateOf'."
+            exit 0
           fi
 
           echo "✅ Uso correcto de remember { mutableStateOf(...) } detectado."

@@ -20,6 +20,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Crear label si no existe
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "ejercicio" --color "0075ca" --description "Issue del ejercicio guiado" 2>/dev/null || true
+
       - name: Verificar si el issue ya existe
         id: check_issue
         env:

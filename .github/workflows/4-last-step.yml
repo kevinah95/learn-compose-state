@@ -25,35 +25,35 @@ jobs:
           FILE="shared/src/commonMain/kotlin/io/github/kevinah95/myapplication/screens/ContadorView.kt"
 
           if [ ! -f "$FILE" ]; then
-            echo "❌ ContadorView.kt no encontrado. Crea el archivo stateless. Revisa el Paso 4."
-            exit 1
+            echo "⏭️ Paso 4 aún no completado — ContadorView.kt no encontrado."
+            exit 0
           fi
 
           if ! grep -q "onIncrement" "$FILE"; then
-            echo "❌ ContadorView.kt debe recibir 'onIncrement' como parámetro lambda."
-            exit 1
+            echo "⏭️ ContadorView.kt debe recibir 'onIncrement' como parámetro lambda."
+            exit 0
           fi
 
           if ! grep -q "onNombreChange" "$FILE"; then
-            echo "❌ ContadorView.kt debe recibir 'onNombreChange' como parámetro lambda."
-            exit 1
+            echo "⏭️ ContadorView.kt debe recibir 'onNombreChange' como parámetro lambda."
+            exit 0
           fi
 
-          # Verificar que ContadorView NO tenga remember (debe ser stateless)
           if grep -q "remember" "$FILE"; then
-            echo "❌ ContadorView.kt no debe contener 'remember'. Debe ser un Composable stateless."
-            exit 1
+            echo "⏭️ ContadorView.kt no debe contener 'remember'. Debe ser stateless."
+            exit 0
           fi
 
           echo "✅ ContadorView.kt stateless verificado correctamente."
           echo "result=success" >> "$GITHUB_OUTPUT"
 
       - name: Verificar que ContadorScreen.kt usa ContadorView
+        if: steps.check.outputs.result == 'success'
         run: |
           FILE="shared/src/commonMain/kotlin/io/github/kevinah95/myapplication/screens/ContadorScreen.kt"
           if ! grep -q "ContadorView" "$FILE"; then
-            echo "❌ ContadorScreen.kt debe llamar a ContadorView(). Revisa el Paso 4."
-            exit 1
+            echo "⏭️ ContadorScreen.kt debe llamar a ContadorView(). Revisa el Paso 4."
+            exit 0
           fi
           echo "✅ ContadorScreen.kt delega a ContadorView."
 

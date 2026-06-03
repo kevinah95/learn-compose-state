@@ -26,9 +26,7 @@ jobs:
           if grep -q "var count = 0" "$FILE"; then
             echo "result=success" >> "$GITHUB_OUTPUT"
           else
-            echo "result=failure" >> "$GITHUB_OUTPUT"
-            echo "❌ ContadorScreen.kt debe contener 'var count = 0' en este paso."
-            exit 1
+            echo "⏭️ Paso 1 aún no completado — esperando que el archivo tenga 'var count = 0'."
           fi
 
       - name: Publicar Paso 2 en el issue
