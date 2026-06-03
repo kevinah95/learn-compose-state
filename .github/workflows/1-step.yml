@@ -1,0 +1,41 @@
+name: Paso 1 — Variables comunes
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'composeApp/src/commonMain/kotlin/**/ContadorScreen.kt'
+
+jobs:
+  check_step_1:
+    name: Verificar Paso 1
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verificar que ContadorScreen.kt tiene un comentario sobre var
+        id: check
+        run: |
+          FILE="composeApp/src/commonMain/kotlin/org/example/composestate/screens/ContadorScreen.kt"
+          if grep -q "var count = 0" "$FILE"; then
+            echo "result=success" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=failure" >> "$GITHUB_OUTPUT"
+            echo "❌ ContadorScreen.kt debe contener 'var count = 0' en este paso."
+            exit 1
+          fi
+
+      - name: Publicar Paso 2 en el issue
+        if: steps.check.outputs.result == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER=$(gh issue list --label "ejercicio" --state open --json number --jq '.[0].number')
+          gh issue comment "$ISSUE_NUMBER" \
+            --body "$(cat .github/steps/2-step.md)"

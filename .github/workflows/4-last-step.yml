@@ -1,0 +1,76 @@
+name: Paso 4 — State Hoisting (último paso)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'composeApp/src/commonMain/kotlin/**/ContadorView.kt'
+
+jobs:
+  check_step_4:
+    name: Verificar Paso 4
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verificar que ContadorView.kt existe y es stateless
+        id: check
+        run: |
+          FILE="composeApp/src/commonMain/kotlin/org/example/composestate/screens/ContadorView.kt"
+
+          if [ ! -f "$FILE" ]; then
+            echo "❌ ContadorView.kt no encontrado. Crea el archivo stateless. Revisa el Paso 4."
+            exit 1
+          fi
+
+          if ! grep -q "onIncrement" "$FILE"; then
+            echo "❌ ContadorView.kt debe recibir 'onIncrement' como parámetro lambda."
+            exit 1
+          fi
+
+          if ! grep -q "onNombreChange" "$FILE"; then
+            echo "❌ ContadorView.kt debe recibir 'onNombreChange' como parámetro lambda."
+            exit 1
+          fi
+
+          # Verificar que ContadorView NO tenga remember (debe ser stateless)
+          if grep -q "remember" "$FILE"; then
+            echo "❌ ContadorView.kt no debe contener 'remember'. Debe ser un Composable stateless."
+            exit 1
+          fi
+
+          echo "✅ ContadorView.kt stateless verificado correctamente."
+          echo "result=success" >> "$GITHUB_OUTPUT"
+
+      - name: Verificar que ContadorScreen.kt usa ContadorView
+        run: |
+          FILE="composeApp/src/commonMain/kotlin/org/example/composestate/screens/ContadorScreen.kt"
+          if ! grep -q "ContadorView" "$FILE"; then
+            echo "❌ ContadorScreen.kt debe llamar a ContadorView(). Revisa el Paso 4."
+            exit 1
+          fi
+          echo "✅ ContadorScreen.kt delega a ContadorView."
+
+      - name: Publicar revisión final en el issue
+        if: steps.check.outputs.result == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER=$(gh issue list --label "ejercicio" --state open --json number --jq '.[0].number')
+          gh issue comment "$ISSUE_NUMBER" \
+            --body "$(cat .github/steps/x-review.md)"
+
+      - name: Cerrar el issue de ejercicio
+        if: steps.check.outputs.result == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER=$(gh issue list --label "ejercicio" --state open --json number --jq '.[0].number')
+          gh issue close "$ISSUE_NUMBER" \
+            --comment "🎓 ¡Ejercicio completado exitosamente! Revisa el resumen arriba."
